@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Scanner;
 
@@ -55,13 +54,8 @@ public class Operator extends User {
         Timestamp timestamp = new Timestamp((System.currentTimeMillis()));
 
         // 判断档案号唯一
-        try {
-            if(DataProcessing.searchDoc(id) != null) {
-                System.out.println("档案号已存在，上传失败.");
-                return;
-            }
-        } catch (SQLException e) {
-            System.out.println("数据库异常，上传失败.");
+        if(DataProcessing.searchDoc(id) != null) {
+            System.out.println("档案号已存在，上传失败.");
             return;
         }
 
@@ -102,15 +96,11 @@ public class Operator extends User {
 
         // 在数据库中记录档案信息
         Doc doc = new Doc(id, this.getName(), timestamp, description, filename);
-        try {
-            boolean result = DataProcessing.insertDoc(doc);
-            if(result) {
-                System.out.println("上传成功.");
-            } else {
-                System.out.println("档案号已存在，上传失败.");
-            }
-        } catch (SQLException e) {
-            System.out.println("数据库异常，上传失败.");
+        boolean result = DataProcessing.insertDoc(doc);
+        if(result) {
+            System.out.println("上传成功.");
+        } else {
+            System.out.println("档案号已存在，上传失败.");
         }
 
     }

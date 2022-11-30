@@ -3,7 +3,6 @@ package com.jakon.Models;
 import com.jakon.Utils.DataProcessing;
 
 import java.io.*;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -27,50 +26,85 @@ public abstract class User implements Serializable {
         return role.equalsIgnoreCase("Browser");
     }
 
-    public abstract void showMenu() throws SQLException;
+    public abstract void showMenu() ;
 
     public void downloadFile() {
         Scanner sc = new Scanner(System.in);
         System.out.print("请输入档案号：");
         String id = sc.next();
-        try {
-            Doc doc = DataProcessing.searchDoc(id);
-            if(doc == null) {
-                System.out.println("指定档案不存在，下载失败.");
-            } else {
-                String filename = doc.getFilename();
-                String uploadPathname = "upload";
-                String downloadPathname = "download" + "\\" + this.getRole() + "\\" + this.getName();
-                FileInputStream fis;
-                FileOutputStream fos;
+        Doc doc = DataProcessing.searchDoc(id);
+        if(doc == null) {
+            System.out.println("指定档案不存在，下载失败.");
+        } else {
+            String filename = doc.getFilename();
+            String uploadPathname = "upload";
+            String downloadPathname = "download" + "\\" + this.getRole() + "\\" + this.getName();
+            FileInputStream fis;
+            FileOutputStream fos;
 
-                File file = new File(downloadPathname);
-                if(!file.exists()) {
-                    file.mkdirs();
-                }
-
-                try {
-                    fis = new FileInputStream(uploadPathname + "\\" + filename);
-                    fos = new FileOutputStream(downloadPathname + "\\" + filename);
-                } catch (FileNotFoundException e) {
-                    System.out.println("IO异常，下载失败.");
-                    return;
-                }
-
-                try (fis; fos) {
-                    byte[] bytes = new byte[1024];
-                    int len;
-                    while ((len = fis.read(bytes)) != -1) {
-                        fos.write(bytes, 0, len);
-                    }
-                } catch (IOException e) {
-                    System.out.println("IO异常，下载失败.");
-                }
+            File file = new File(downloadPathname);
+            if(!file.exists()) {
+                file.mkdirs();
             }
-        } catch (SQLException e) {
-            System.out.println("数据库异常，下载失败.");
+
+            try {
+                fis = new FileInputStream(uploadPathname + "\\" + filename);
+                fos = new FileOutputStream(downloadPathname + "\\" + filename);
+            } catch (FileNotFoundException e) {
+                System.out.println("IO异常，下载失败.");
+                return;
+            }
+
+            try (fis; fos) {
+                byte[] bytes = new byte[1024];
+                int len;
+                while ((len = fis.read(bytes)) != -1) {
+                    fos.write(bytes, 0, len);
+                }
+            } catch (IOException e) {
+                System.out.println("IO异常，下载失败.");
+            }
         }
         System.out.println("下载成功.");
+    }
+
+    public String downloadFile(String id) {
+
+        Doc doc = DataProcessing.searchDoc(id);
+
+        if(doc == null) {
+            return "指定档案号不存在，下载失败.";
+        }
+
+        String filename = doc.getFilename();
+        String uploadPathname = "upload";
+        String downloadPathname = "download" + "\\" + this.getRole() + "\\" + this.getName();
+        FileInputStream fis;
+        FileOutputStream fos;
+
+        File file = new File(downloadPathname);
+        if(!file.exists()) {
+            file.mkdirs();
+        }
+
+        try {
+            fis = new FileInputStream(uploadPathname + "\\" + filename);
+            fos = new FileOutputStream(downloadPathname + "\\" + filename);
+        } catch (FileNotFoundException e) {
+            return "IO异常，下载失败.";
+        }
+
+        try (fis; fos) {
+            byte[] bytes = new byte[1024];
+            int len;
+            while ((len = fis.read(bytes)) != -1) {
+                fos.write(bytes, 0, len);
+            }
+        } catch (IOException e) {
+            return "IO异常，下载失败.";
+        }
+
+        return "下载成功.";
     }
 
     public void showFileList() {
@@ -79,15 +113,11 @@ public abstract class User implements Serializable {
             return;
         }
 
-        try {
-            Enumeration<Doc> e = DataProcessing.getAllDoc();
-            System.out.println("档案列表如下：");
-            while(e.hasMoreElements()) {
-                Doc d = e.nextElement();
-                System.out.println(d);
-            }
-        } catch (SQLException ex) {
-            System.out.println("数据库异常，显示档案列表失败.");
+        Enumeration<Doc> e = DataProcessing.getAllDoc();
+        System.out.println("档案列表如下：");
+        while(e.hasMoreElements()) {
+            Doc d = e.nextElement();
+            System.out.println(d);
         }
     }
 

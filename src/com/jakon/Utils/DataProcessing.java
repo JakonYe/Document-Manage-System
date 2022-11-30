@@ -3,7 +3,6 @@ package com.jakon.Utils;
 import com.jakon.Models.*;
 
 import java.io.*;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -11,7 +10,6 @@ import java.util.Hashtable;
 public class DataProcessing {
     public static Hashtable<String, User> users = new Hashtable<>();
     public static Hashtable<String, Doc> docs = new Hashtable<>();
-    private static boolean connectToDB = false;
 
     static {
         users.put("jack", new Operator("jack", "123", "Operator"));
@@ -21,10 +19,6 @@ public class DataProcessing {
     }
 
     public static void init() {
-        // connect to database
-        // update database connection status
-        connectToDB = Math.random() > 0.1123;
-
         try {
             initDataInfo();
         } catch (IOException | ClassNotFoundException e) {
@@ -88,84 +82,32 @@ public class DataProcessing {
         ois2.close();
     }
 
-    public static User searchUser(String name) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database.");
-        }
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Query.");
-        }
-
+    public static User searchUser(String name) {
         if (!users.containsKey(name)) return null;
         return users.get(name);
     }
 
-    public static User searchUser(String name, String password) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Query");
-        }
-
+    public static User searchUser(String name, String password) {
         if (!users.containsKey(name)) return null;
         User u = users.get(name);
         if (!u.getPassword().equals(password)) return null;
         return u;
     }
 
-    public static Doc searchDoc(String id) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database.");
-        }
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Query.");
-        }
-
-        if(!docs.containsKey(id)) return null;
+    public static Doc searchDoc(String id) {
+        if (!docs.containsKey(id)) return null;
         return docs.get(id);
     }
 
-    public static Enumeration<User> getAllUser() throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Query");
-        }
-
+    public static Enumeration<User> getAllUser() {
         return users.elements();
     }
 
-    public static Enumeration<Doc> getAllDoc() throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Query");
-        }
-
+    public static Enumeration<Doc> getAllDoc() {
         return docs.elements();
     }
 
-    public static boolean insertUser(String name, String password, String role) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Update");
-        }
-
+    public static boolean insertUser(String name, String password, String role) {
         if (users.containsKey(name)) return false;
         User user = null;
         if (role.equalsIgnoreCase("Administrator")) {
@@ -180,34 +122,15 @@ public class DataProcessing {
         return true;
     }
 
-    public static boolean insertDoc(Doc doc) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Update");
-        }
-
-        if(docs.containsKey(doc.getID())) return false;
+    public static boolean insertDoc(Doc doc) {
+        if (docs.containsKey(doc.getID())) return false;
         docs.put(doc.getID(), doc);
         return true;
     }
 
-    public static boolean delete(String name) throws SQLException {
-        if (!connectToDB) {
-            throw new SQLException("Not Connected to Database");
-        }
-
-        double ranValue = Math.random();
-        if (ranValue > 0.75) {
-            throw new SQLException("Error in executing Update");
-        }
-
+    public static boolean delete(String name) {
         if (!users.containsKey(name)) return false;
         users.remove(name);
         return true;
     }
-
 }

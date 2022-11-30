@@ -2,7 +2,6 @@ package com.jakon.Models;
 
 import com.jakon.Utils.DataProcessing;
 
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Scanner;
 
@@ -28,34 +27,10 @@ public class Administrator extends User {
             System.out.print("请输入您的选择：");
             String choose = sc.next();
             switch (choose) {
-                case "1" -> {
-                    try {
-                        addUser();
-                    } catch (SQLException exp) {
-                        System.out.println("数据库异常，添加失败，请重试.");
-                    }
-                }
-                case "2" -> {
-                    try {
-                        deleteUser();
-                    } catch (SQLException exp) {
-                        System.out.println("数据库异常，删除失败，请重试.");
-                    }
-                }
-                case "3" -> {
-                    try {
-                        updateUserInfo();
-                    } catch (SQLException exp) {
-                        System.out.println("数据库异常，修改失败，请重试.");
-                    }
-                }
-                case "4" -> {
-                    try {
-                        showUserList();
-                    } catch (SQLException exp) {
-                        System.out.println("数据库异常，显示列表失败，请重试.");
-                    }
-                }
+                case "1" -> addUser();
+                case "2" -> deleteUser();
+                case "3" -> updateUserInfo();
+                case "4" -> showUserList();
                 case "5" -> {
                     System.out.println("退出.");
                     break loop;
@@ -65,7 +40,7 @@ public class Administrator extends User {
         }
     }
 
-    public void addUser() throws SQLException {
+    public void addUser() {
         Scanner sc = new Scanner(System.in);
 
         String name;
@@ -94,7 +69,23 @@ public class Administrator extends User {
         System.out.println("添加成功.");
     }
 
-    public void deleteUser() throws SQLException {
+    public String addUser(String name, String password, String role) {
+        if (DataProcessing.searchUser(name) != null) {
+            return "该用户名已存在，添加失败.";
+        }
+
+        boolean checkRole = false;
+        if (role.equalsIgnoreCase("Administrator")) checkRole = true;
+        else if (role.equalsIgnoreCase("Operator")) checkRole = true;
+        else if (role.equalsIgnoreCase("Browser")) checkRole = true;
+        if (!checkRole) return "该身份不存在，添加失败.";
+
+        boolean result = DataProcessing.insertUser(name, password, role);
+        System.out.println(result);
+        return "添加成功.";
+    }
+
+    public void deleteUser() {
         Scanner sc = new Scanner(System.in);
         System.out.print("请输入用户名：");
         String name = sc.next();
@@ -102,7 +93,7 @@ public class Administrator extends User {
         else System.out.println("该用户名不存在，删除失败.");
     }
 
-    public void updateUserInfo() throws SQLException {
+    public void updateUserInfo() {
         Scanner sc = new Scanner(System.in);
         System.out.print("请输入用户名：");
         String name = sc.next();
@@ -127,7 +118,7 @@ public class Administrator extends User {
         }
     }
 
-    public void showUserList() throws SQLException {
+    public void showUserList() {
         Enumeration<User> e = DataProcessing.getAllUser();
         System.out.println("用户列表如下：");
         while (e.hasMoreElements()) {

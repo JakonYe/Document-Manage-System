@@ -1,4 +1,4 @@
-package com.jakon.UI;
+package com.jakon.Utils;
 
 import com.jakon.Models.Administrator;
 import com.jakon.Models.Browser;
@@ -7,7 +7,6 @@ import com.jakon.Models.User;
 import com.jakon.Utils.DataProcessing;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class APP {
@@ -20,13 +19,7 @@ public class APP {
             System.out.print("请输入您的选择：");
             String choose = sc.next();
             switch (choose) {
-                case "1" -> {
-                    try {
-                        login();
-                    } catch (SQLException exp) {
-                        System.out.println("数据库异常，登陆失败，请重试.");
-                    }
-                }
+                case "1" -> login();
                 case "2" -> {
                     try {
                         DataProcessing.saveDataInfo();
@@ -41,7 +34,7 @@ public class APP {
         }
     }
 
-    public static void login() throws SQLException {
+    public static void login() {
         Scanner sc = new Scanner(System.in);
         System.out.print("请输入用户名：");
         String name = sc.next();
