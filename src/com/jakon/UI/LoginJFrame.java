@@ -1,6 +1,8 @@
 package com.jakon.UI;
 
 import com.jakon.Models.Administrator;
+import com.jakon.Models.Browser;
+import com.jakon.Models.Operator;
 import com.jakon.Models.User;
 import com.jakon.Utils.DataProcessing;
 
@@ -93,7 +95,7 @@ public class LoginJFrame extends JFrame implements MouseListener, WindowListener
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == login) {
-            System.out.println("点击了登录按钮");
+            System.out.println("点击登录按钮.");
 
             // 获取两个文本输入框中的内容
             String usernameInput = username.getText();
@@ -116,15 +118,15 @@ public class LoginJFrame extends JFrame implements MouseListener, WindowListener
                     String password = user.getPassword();
                     String role = user.getRole();
                     if (user.getRole().equalsIgnoreCase("Administrator")) {
-                        new AdminJFrame(new Administrator(name, password, role));
+                        new AdminJFrame(new Administrator(name, password, "Administrator"));
                     } else if (user.getRole().equalsIgnoreCase("Operator")) {
-                        System.out.println("Operator Login.");
+                        new OperateJFrame(new Operator(name, password, "Operator"));
                     } else if (user.getRole().equalsIgnoreCase("Browser")) {
-                        System.out.println("Browser login.");
+                        new BrowseJFrame(new Browser(name, password, "Browser"));
                     }
                 } else {
-                    System.out.println("用户名或密码错误");
-                    showJDialog("用户名或密码错误");
+                    System.out.println("用户名或密码错误.");
+                    showJDialog("用户名或密码错误.");
                     // 清空输入框
                     username.setText("");
                     password.setText("");

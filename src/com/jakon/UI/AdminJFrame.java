@@ -47,7 +47,7 @@ public class AdminJFrame extends JFrame implements MouseListener, WindowListener
     }
 
     private void initJFrame() {
-        this.setTitle("档案管理系统 - 管理员");
+        this.setTitle("档案管理系统 - 管理员 " + this.admin.getName());
         this.setSize(700, 460);
         this.setResizable(false);
         this.setAlwaysOnTop(true);
@@ -118,8 +118,8 @@ public class AdminJFrame extends JFrame implements MouseListener, WindowListener
         downloadDocsJPanel.add(docID);
 
         // 添加下载按钮
-        download.setBounds(50, 170, 150, 40);
-        download.setText("下载");
+        download.setBounds(50, 170, 150, 60);
+        download.setText("下载档案");
         download.setFont(font);
         download.addMouseListener(this);
         downloadDocsJPanel.add(download);

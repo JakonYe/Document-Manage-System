@@ -101,4 +101,53 @@ public class Operator extends User implements Serializable {
         }
 
     }
+
+    public String uploadFile(String id, String creator, Timestamp timestamp, String description, String filepath) {
+
+        // 判断档案号唯一
+        if (DataProcessing.searchDoc(id) != null) {
+            return "档案号已存在，上传失败.";
+        }
+
+        // 创建 upload 目录
+        File dir = new File("upload");
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) return "找不到上传路径，上传失败.";
+        }
+
+        // 将文件拷贝到 upload 目录下
+        String pathname = "upload";
+        String filename;
+        FileInputStream fis;
+        FileOutputStream fos;
+
+        try {
+            fis = new FileInputStream(filepath);
+            File file = new File(filepath);
+            if (!file.exists()) {
+                return "文件不存在，上传失败.";
+            }
+            filename = file.getName();
+            fos = new FileOutputStream(pathname + "\\" + filename);
+        } catch (IOException e) {
+            return "IO异常，上传失败.";
+        }
+
+        // 自动释放资源
+        try (fis; fos) {
+            byte[] bytes = new byte[1024 * 1024 * 5];
+            int len;
+            while ((len = fis.read(bytes)) != -1) {
+                fos.write(bytes, 0, len);
+            }
+        } catch (IOException e) {
+            return "IO异常，上传失败.";
+        }
+
+        // 在数据库中记录档案信息
+        Doc doc = new Doc(id, this.getName(), timestamp, description, filename);
+        boolean result = DataProcessing.insertDoc(doc);
+        return result ? "上传成功." : "上传失败.";
+    }
+
 }

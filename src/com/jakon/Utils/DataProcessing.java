@@ -22,7 +22,8 @@ public class DataProcessing {
         try {
             initDataInfo();
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
