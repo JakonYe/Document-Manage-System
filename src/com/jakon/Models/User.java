@@ -26,14 +26,14 @@ public abstract class User implements Serializable {
         return role.equalsIgnoreCase("Browser");
     }
 
-    public abstract void showMenu() ;
+    public abstract void showMenu();
 
     public void downloadFile() {
         Scanner sc = new Scanner(System.in);
         System.out.print("请输入档案号：");
         String id = sc.next();
         Doc doc = DataProcessing.searchDoc(id);
-        if(doc == null) {
+        if (doc == null) {
             System.out.println("指定档案不存在，下载失败.");
         } else {
             String filename = doc.getFilename();
@@ -43,7 +43,7 @@ public abstract class User implements Serializable {
             FileOutputStream fos;
 
             File file = new File(downloadPathname);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 file.mkdirs();
             }
 
@@ -72,7 +72,7 @@ public abstract class User implements Serializable {
 
         Doc doc = DataProcessing.searchDoc(id);
 
-        if(doc == null) {
+        if (doc == null) {
             return "指定档案号不存在，下载失败.";
         }
 
@@ -83,8 +83,9 @@ public abstract class User implements Serializable {
         FileOutputStream fos;
 
         File file = new File(downloadPathname);
-        if(!file.exists()) {
-            file.mkdirs();
+        if (!file.exists()) {
+            boolean result = file.mkdirs();
+            if (!result) return "无法找到指定档案，下载失败.";
         }
 
         try {
@@ -95,7 +96,7 @@ public abstract class User implements Serializable {
         }
 
         try (fis; fos) {
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[1024 * 1024 * 5];
             int len;
             while ((len = fis.read(bytes)) != -1) {
                 fos.write(bytes, 0, len);
@@ -108,14 +109,14 @@ public abstract class User implements Serializable {
     }
 
     public void showFileList() {
-        if(DataProcessing.docs.size() == 0) {
+        if (DataProcessing.docs.size() == 0) {
             System.out.println("暂无可下载档案.");
             return;
         }
 
         Enumeration<Doc> e = DataProcessing.getAllDoc();
         System.out.println("档案列表如下：");
-        while(e.hasMoreElements()) {
+        while (e.hasMoreElements()) {
             Doc d = e.nextElement();
             System.out.println(d);
         }

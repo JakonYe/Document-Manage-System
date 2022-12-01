@@ -2,14 +2,11 @@ package com.jakon.Models;
 
 import com.jakon.Utils.DataProcessing;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.Scanner;
 
-public class Operator extends User {
+public class Operator extends User implements Serializable {
     public Operator() {
     }
 
@@ -54,7 +51,7 @@ public class Operator extends User {
         Timestamp timestamp = new Timestamp((System.currentTimeMillis()));
 
         // 判断档案号唯一
-        if(DataProcessing.searchDoc(id) != null) {
+        if (DataProcessing.searchDoc(id) != null) {
             System.out.println("档案号已存在，上传失败.");
             return;
         }
@@ -71,7 +68,7 @@ public class Operator extends User {
         try {
             fis = new FileInputStream(filename);
             File file = new File(filename);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 System.out.println("文件不存在，上传失败.");
                 return;
             }
@@ -97,7 +94,7 @@ public class Operator extends User {
         // 在数据库中记录档案信息
         Doc doc = new Doc(id, this.getName(), timestamp, description, filename);
         boolean result = DataProcessing.insertDoc(doc);
-        if(result) {
+        if (result) {
             System.out.println("上传成功.");
         } else {
             System.out.println("档案号已存在，上传失败.");

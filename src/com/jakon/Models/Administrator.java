@@ -2,10 +2,11 @@ package com.jakon.Models;
 
 import com.jakon.Utils.DataProcessing;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Scanner;
 
-public class Administrator extends User {
+public class Administrator extends User implements Serializable {
     public Administrator() {
     }
 
@@ -74,15 +75,18 @@ public class Administrator extends User {
             return "该用户名已存在，添加失败.";
         }
 
-        boolean checkRole = false;
-        if (role.equalsIgnoreCase("Administrator")) checkRole = true;
-        else if (role.equalsIgnoreCase("Operator")) checkRole = true;
-        else if (role.equalsIgnoreCase("Browser")) checkRole = true;
-        if (!checkRole) return "该身份不存在，添加失败.";
+        if (role.equalsIgnoreCase("Administrator")) {
+            DataProcessing.insertUser(name, password, "Administrator");
+            return "添加成功.";
+        } else if (role.equalsIgnoreCase("Operator")) {
+            DataProcessing.insertUser(name, password, "Operator");
+            return "添加成功.";
+        } else if (role.equalsIgnoreCase("Browser")) {
+            DataProcessing.insertUser(name, password, "Browser");
+            return "添加成功.";
+        }
 
-        boolean result = DataProcessing.insertUser(name, password, role);
-        System.out.println(result);
-        return "添加成功.";
+        return "该身份不存在，添加失败.";
     }
 
     public void deleteUser() {
@@ -91,6 +95,11 @@ public class Administrator extends User {
         String name = sc.next();
         if (DataProcessing.delete(name)) System.out.println("删除成功.");
         else System.out.println("该用户名不存在，删除失败.");
+    }
+
+    public String deleteUser(String name) {
+        boolean result = DataProcessing.delete(name);
+        return result ? "删除成功." : "删除失败.";
     }
 
     public void updateUserInfo() {
@@ -116,6 +125,24 @@ public class Administrator extends User {
                 System.out.println("没有这种身份，请重新输入.");
             }
         }
+    }
+
+    public String updateUserInfo(String name, String newPassword, String newRole) {
+        if (newRole.equalsIgnoreCase("Administrator")) {
+            DataProcessing.delete(name);
+            DataProcessing.insertUser(name, newPassword, "Administrator");
+            return "修改成功.";
+        } else if (newRole.equalsIgnoreCase("Operator")) {
+            DataProcessing.delete(name);
+            DataProcessing.insertUser(name, newPassword, "Operator");
+            return "修改成功.";
+        } else if (newRole.equalsIgnoreCase("Browser")) {
+            DataProcessing.delete(name);
+            DataProcessing.insertUser(name, newPassword, "Browser");
+            return "修改成功.";
+        }
+
+        return "新身份不存在，修改失败.";
     }
 
     public void showUserList() {

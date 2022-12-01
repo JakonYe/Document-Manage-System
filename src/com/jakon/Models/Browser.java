@@ -1,8 +1,9 @@
 package com.jakon.Models;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Browser extends User {
+public class Browser extends User implements Serializable {
     public Browser() {
     }
 

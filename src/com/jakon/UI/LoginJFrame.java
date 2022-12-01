@@ -115,11 +115,11 @@ public class LoginJFrame extends JFrame implements MouseListener, WindowListener
                     String name = user.getName();
                     String password = user.getPassword();
                     String role = user.getRole();
-                    if(user.getRole().equalsIgnoreCase("Administrator")) {
-                        new AdministratorJFrame(new Administrator(name, password, role));
-                    } else if(user.getRole().equalsIgnoreCase("Operator")) {
+                    if (user.getRole().equalsIgnoreCase("Administrator")) {
+                        new AdminJFrame(new Administrator(name, password, role));
+                    } else if (user.getRole().equalsIgnoreCase("Operator")) {
                         System.out.println("Operator Login.");
-                    } else if(user.getRole().equalsIgnoreCase("Browser")) {
+                    } else if (user.getRole().equalsIgnoreCase("Browser")) {
                         System.out.println("Browser login.");
                     }
                 } else {
