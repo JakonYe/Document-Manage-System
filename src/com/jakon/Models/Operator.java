@@ -145,7 +145,7 @@ public class Operator extends User implements Serializable {
         }
 
         // 在数据库中记录档案信息
-        Doc doc = new Doc(id, this.getName(), timestamp, description, filename);
+        Doc doc = new Doc(id, creator, timestamp, description, filename);
         boolean result = DataProcessing.insertDoc(doc);
         return result ? "上传成功." : "上传失败.";
     }

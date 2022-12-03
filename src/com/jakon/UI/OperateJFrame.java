@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collection;
 
@@ -195,9 +195,10 @@ public class OperateJFrame extends JFrame implements WindowListener, MouseListen
     @Override
     public void windowClosing(WindowEvent e) {
         try {
-            DataProcessing.saveDataInfo();
-            System.out.println("程序数据存储到本地文件.");
-        } catch (IOException ex) {
+//            DataProcessing.saveDataInfo();
+//            System.out.println("程序数据存储到本地文件.");
+            DataProcessing.savaDataInfoToDB();
+        } catch (SQLException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
         System.exit(0);
@@ -249,7 +250,7 @@ public class OperateJFrame extends JFrame implements WindowListener, MouseListen
             System.out.println("点击上传按钮.");
 
             String id = this.id.getText();
-            String description = this.id.getText();
+            String description = this.description.getText();
             String filepath = this.filepath.getText();
 
             if (id.length() == 0 || description.length() == 0 || filepath.length() == 0) {

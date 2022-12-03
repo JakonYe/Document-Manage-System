@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collection;
 
 public class AdminJFrame extends JFrame implements MouseListener, WindowListener {
@@ -359,9 +359,10 @@ public class AdminJFrame extends JFrame implements MouseListener, WindowListener
     @Override
     public void windowClosing(WindowEvent e) {
         try {
-            DataProcessing.saveDataInfo();
-            System.out.println("程序数据存储到本地文件.");
-        } catch (IOException ex) {
+//            DataProcessing.saveDataInfo();
+//            System.out.println("程序数据存储到本地文件.");
+            DataProcessing.savaDataInfoToDB();
+        } catch (ClassNotFoundException | SQLException ex) {
             throw new RuntimeException(ex);
         }
         System.exit(0);

@@ -162,11 +162,6 @@ public class LoginJFrame extends JFrame implements MouseListener, WindowListener
 
     @Override
     public void windowClosing(WindowEvent e) {
-        try {
-            DataProcessing.saveDataInfo();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
         System.exit(0);
     }
 

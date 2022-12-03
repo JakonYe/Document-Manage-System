@@ -7,5 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="druid-1.1.12" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.48" level="project" />
+    <orderEntry type="library" name="flatlaf-demo-2.6" level="project" />
   </component>
 </module>
